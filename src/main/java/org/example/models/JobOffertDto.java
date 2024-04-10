@@ -2,6 +2,7 @@ package org.example.models;
 
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class JobOffertDto {
 
@@ -38,5 +39,22 @@ public class JobOffertDto {
 
     public void setDate(LocalDateTime date) {
         this.date = date;
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if(obj == null) return false;
+
+        if(this == obj) return true;
+
+        JobOffertDto o = (JobOffertDto) obj;
+        return this.getTitle().equals(o.getTitle()) && this.getLink().equals(o.getLink());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getTitle(),getLink());
     }
 }
