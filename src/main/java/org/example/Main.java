@@ -25,14 +25,13 @@ public class Main {
             ContainerForJobOfferts.addOffertToMap(job1,"Pracuj.pl");
         }
 
-        for (JobOffertDto job1: offertDtos2)
+        for (JobOffertDto job2: offertDtos2)
         {
-            ContainerForJobOfferts.addOffertToMap(job1,"Pracuj.pl");
+            ContainerForJobOfferts.addOffertToMap(job2,"Pracuj.pl");
         }
 
-
         Map<JobOffertDto,String> sds = ContainerForJobOfferts.getAllOfferts();
-        System.out.println("elo");
+
 
     }
 }

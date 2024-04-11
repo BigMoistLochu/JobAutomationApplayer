@@ -41,7 +41,8 @@ public class PracujPlJobCrawler {
                 if(checkLocator)
                 {
                     String title = actualLocator.textContent();
-                    String link = actualLocator.getAttribute("href");
+                    //.split("&searchId=")[0] is for remomving unique id from the browser for analyze customer
+                    String link = actualLocator.getAttribute("href").split("&searchId=")[0];
                     list.add(new JobOffertDto(title,link, LocalDateTime.now()));
                 }
             }
@@ -51,7 +52,8 @@ public class PracujPlJobCrawler {
             }
 
         }
-
+        page.close();
+        System.out.println("Scrapper skonczyl zbierac dane z : "+ url);
         return list;
     }
 
