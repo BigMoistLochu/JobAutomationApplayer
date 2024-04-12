@@ -23,7 +23,6 @@ class ContainerForJobOffertsTest {
     }
 
 
-
     @Test
     void Add_Two_Equals_Objects_With_The_Same_Time_To_The_ContainerMap_Is_Not_Possible() {
         LocalDateTime TimeForOffer = LocalDateTime.now();
