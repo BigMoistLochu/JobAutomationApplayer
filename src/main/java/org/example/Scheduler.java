@@ -12,14 +12,15 @@ public final class Scheduler {
 
     private final Timer scheduler = new Timer();
     private Scheduler() {
-        TimerTask timerTask = new TimerTask() {
+        TimerTask task_scrap_pracujPL = new TimerTask() {
             @Override
             public void run() {
                 PracujPlJobCrawler pracujPlJobCrawler = new PracujPlJobCrawler();
                 List<JobOffertDto> offertDtos =  pracujPlJobCrawler.setPage("https://it.pracuj.pl/praca?sc=0&itth=38").scrapJobOffers();
+
             }
         };
-        scheduler.schedule(timerTask,0,10*60*1000);
+        scheduler.schedule(task_scrap_pracujPL,0,10*60*1000);
     }
 
     public synchronized static Scheduler getInstance() {
