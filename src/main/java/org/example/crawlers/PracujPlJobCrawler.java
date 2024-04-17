@@ -1,4 +1,4 @@
-package org.example;
+package org.example.crawlers;
 
 import com.microsoft.playwright.*;
 import org.example.models.JobOffertDto;
@@ -48,12 +48,12 @@ public class PracujPlJobCrawler {
             }
             catch (RuntimeException e)
             {
-                System.out.println("wystapil jakis blad: " + e.getMessage());
+                System.out.println("wystapil blad: " + e.getMessage());
             }
 
         }
         page.close();
-        System.out.println("Scrapper skonczyl zbierac dane z : "+ url);
+        System.out.println("Scrapper skonczyl zbierac dane z : " + url);
         return list;
     }
 

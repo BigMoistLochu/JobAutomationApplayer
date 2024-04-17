@@ -1,19 +1,25 @@
 package org.example.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class JobOffertDto {
 
-    private String title;
-    private String link;
 
+    private String title;
+   
+    private String description;
+
+    @JsonIgnore
     private LocalDateTime date;
 
-    public JobOffertDto(String title, String link, LocalDateTime date) {
+    public JobOffertDto(String title, String description, LocalDateTime date) {
         this.title = title;
-        this.link = link;
+        this.description = description;
         this.date = date;
     }
 
@@ -25,12 +31,12 @@ public class JobOffertDto {
         this.title = title;
     }
 
-    public String getLink() {
-        return link;
+    public String getDescription() {
+        return description;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public LocalDateTime getDate() {
@@ -41,7 +47,6 @@ public class JobOffertDto {
         this.date = date;
     }
 
-
     @Override
     public boolean equals(Object obj) {
 
@@ -49,11 +54,11 @@ public class JobOffertDto {
         if(this == obj) return true;
 
         JobOffertDto o = (JobOffertDto) obj;
-        return this.getTitle().equals(o.getTitle()) && this.getLink().equals(o.getLink());
+        return this.getTitle().equals(o.getTitle()) && this.getDescription().equals(o.getDescription());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getTitle(),getLink());
+        return Objects.hash(getTitle(), getDescription());
     }
 }

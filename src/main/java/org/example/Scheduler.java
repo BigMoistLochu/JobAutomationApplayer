@@ -1,7 +1,9 @@
 package org.example;
 
+import org.example.crawlers.PracujPlJobCrawler;
 import org.example.models.JobOffertDto;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -12,15 +14,12 @@ public final class Scheduler {
 
     private final Timer scheduler = new Timer();
     private Scheduler() {
-        TimerTask task_scrap_pracujPL = new TimerTask() {
-            @Override
-            public void run() {
-                PracujPlJobCrawler pracujPlJobCrawler = new PracujPlJobCrawler();
-                List<JobOffertDto> offertDtos =  pracujPlJobCrawler.setPage("https://it.pracuj.pl/praca?sc=0&itth=38").scrapJobOffers();
+        TimerTask firstScrappForPracujPl = getFirstScrappForPracujPl();
+        firstScrappForPracujPl.run();
 
-            }
-        };
-        scheduler.schedule(task_scrap_pracujPL,0,10*60*1000);
+        TimerTask taskForPracujPL = createTaskForPracujPl();
+
+        scheduler.schedule(taskForPracujPL,0,1*60*1000);
     }
 
     public synchronized static Scheduler getInstance() {
@@ -29,11 +28,39 @@ public final class Scheduler {
         }
         return INSTANCE;
     }
-
-    public void addTaskToQueue(TimerTask task,long delay,long period)
+    private TimerTask getFirstScrappForPracujPl()
     {
-        scheduler.schedule(task,delay,period);
+        return new TimerTask() {
+            @Override
+            public void run() {
+                PracujPlJobCrawler pracujPlJobCrawler = new PracujPlJobCrawler();
+                List<JobOffertDto> offertJobs =  pracujPlJobCrawler.setPage("https://it.pracuj.pl/praca?sc=0&itth=38").scrapJobOffers();
+
+                for(JobOffertDto job: offertJobs)
+                {
+                    ContainerForJobOfferts.addOfferToMapOnce(job,"PracujPl");
+                }
+            }
+        };
     }
 
+    private TimerTask createTaskForPracujPl()
+    {
+        return new TimerTask() {
+            @Override
+            public void run() {
+                PracujPlJobCrawler pracujPlJobCrawler = new PracujPlJobCrawler();
+                List<JobOffertDto> offertJobs =  pracujPlJobCrawler.setPage("https://it.pracuj.pl/praca?sc=0&itth=38").scrapJobOffers();
 
+                for(JobOffertDto job: offertJobs)
+                {
+                    try {
+                        ContainerForJobOfferts.addOffertToMapAndSendToDiscordIfOffertIsNew(job,"PracujPL");
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        };
+    }
 }

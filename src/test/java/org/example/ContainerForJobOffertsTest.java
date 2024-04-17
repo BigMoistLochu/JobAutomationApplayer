@@ -36,10 +36,10 @@ class ContainerForJobOffertsTest {
         testMapOfferts.put(offert1,"PracujPL");
         assertEquals(testMapOfferts.size(),1);
         //if the object is the same (hashcode and equals return the same value) then addOffertToMap don't add to Map
-        ContainerForJobOfferts.addOffertToMap(offert2,"PracujPL");
+        ContainerForJobOfferts.addOfferToMapOnce(offert2,"PracujPL");
         assertEquals(testMapOfferts.size(),1);
 
-        ContainerForJobOfferts.addOffertToMap(offert3,"PracujPL");
+        ContainerForJobOfferts.addOfferToMapOnce(offert3,"PracujPL");
         assertEquals(testMapOfferts.size(),2);
     }
 
@@ -57,10 +57,10 @@ class ContainerForJobOffertsTest {
         testMapOfferts.put(offert1,"PracujPL");
         assertEquals(testMapOfferts.size(),1);
         //if the object is the same (hashcode and equals return the same value) then addOffertToMap don't add to Map
-        ContainerForJobOfferts.addOffertToMap(offert2,"PracujPL");
+        ContainerForJobOfferts.addOfferToMapOnce(offert2,"PracujPL");
         assertEquals(testMapOfferts.size(),1);
 
-        ContainerForJobOfferts.addOffertToMap(offert3,"PracujPL");
+        ContainerForJobOfferts.addOfferToMapOnce(offert3,"PracujPL");
         assertEquals(testMapOfferts.size(),2);
     }
 
