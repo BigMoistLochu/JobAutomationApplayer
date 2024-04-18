@@ -24,6 +24,7 @@ public final class DiscordWeebHookSender{
 
         OutputStream os = con.getOutputStream();
         os.write(mapper.writeValueAsBytes(jobOffertDto));
+
         os.flush();
         os.close();
         int responseCode = con.getResponseCode();
@@ -33,7 +34,7 @@ public final class DiscordWeebHookSender{
             System.out.println("pomyslnie wyslano nowa oferte na discord");
         }
         else{
-            System.out.println("cos poszlo nie tak kod:"+ responseCode);
+            System.out.println("cos poszlo nie tak kod:" + responseCode);
         }
 
     }

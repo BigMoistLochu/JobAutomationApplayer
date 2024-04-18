@@ -7,26 +7,17 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PracujPlJobCrawler {
-
+public class JobsCrawler {
     private final Playwright playwright = Playwright.create();
+    private final Page page =  playwright.firefox().launch().newPage(); //new BrowserType.LaunchOptions().setHeadless(false) if you wanna see a browser
 
-    private final Browser browser =  playwright.firefox().launch(); //new BrowserType.LaunchOptions().setHeadless(false) if you wanna see a browser
-    private String url;
 
-    private final List<JobOffertDto> list = new ArrayList<>();
 
-    public PracujPlJobCrawler setPage(String url)
+    public List<JobOffertDto> scrapJobsFromPracujPLWebsite(String url)
     {
-        this.url = url;
-        return this;
-    }
-
-    public List<JobOffertDto> scrapJobOffers()
-    {
-        Page page =  browser.newPage();
         page.navigate(url);
         page.waitForLoadState();
+        List<JobOffertDto> allJobsFromWebsite = new ArrayList<>();
 
         //to 50 offer bcs this is one page
         for (int i = 1; i <= 50; i++)
@@ -43,7 +34,7 @@ public class PracujPlJobCrawler {
                     String title = actualLocator.textContent();
                     //.split("&searchId=")[0] is for remomving unique id from the browser for analyze customer
                     String link = actualLocator.getAttribute("href").split("&searchId=")[0];
-                    list.add(new JobOffertDto(title,link, LocalDateTime.now()));
+                    allJobsFromWebsite.add(new JobOffertDto(title,link, LocalDateTime.now()));
                 }
             }
             catch (RuntimeException e)
@@ -52,10 +43,18 @@ public class PracujPlJobCrawler {
             }
 
         }
-        page.close();
-        browser.close();
+
+
+        playwright.close();
         System.out.println("Scrapper skonczyl zbierac dane z : " + url);
-        return list;
+        return allJobsFromWebsite;
+    }
+
+
+    public List<JobOffertDto> scrapJobsFromJustJoinItWebsite(String url)
+    {
+        List<JobOffertDto> allJobsFromWebsite = new ArrayList<>();
+        return allJobsFromWebsite;
     }
 
 

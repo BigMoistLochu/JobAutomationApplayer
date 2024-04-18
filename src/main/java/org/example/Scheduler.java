@@ -1,6 +1,6 @@
 package org.example;
 
-import org.example.crawlers.PracujPlJobCrawler;
+import org.example.crawlers.JobsCrawler;
 import org.example.models.JobOffertDto;
 
 import java.io.IOException;
@@ -12,15 +12,14 @@ public final class Scheduler {
 
     private static Scheduler INSTANCE;
 
-    private final Timer scheduler = new Timer();
-
     private Scheduler() {
         TimerTask firstScrappForPracujPl = getFirstScrappForPracujPl();
         firstScrappForPracujPl.run();
 
         TimerTask taskForPracujPL = createTaskForPracujPl();
 
-        scheduler.schedule(taskForPracujPL,0,1*60*1000);
+        Timer scheduler = new Timer();
+        scheduler.schedule(taskForPracujPL,0,10*60*1000);
     }
 
     public synchronized static Scheduler getInstance() {
@@ -35,8 +34,8 @@ public final class Scheduler {
         return new TimerTask() {
             @Override
             public void run() {
-                PracujPlJobCrawler pracujPlJobCrawler = new PracujPlJobCrawler();
-                List<JobOffertDto> offertJobs =  pracujPlJobCrawler.setPage("https://it.pracuj.pl/praca?sc=0&itth=38").scrapJobOffers();
+                JobsCrawler jobsCrawler = new JobsCrawler();
+                List<JobOffertDto> offertJobs =  jobsCrawler.scrapJobsFromPracujPLWebsite("https://it.pracuj.pl/praca?sc=0&itth=38");
 
                 for(JobOffertDto job: offertJobs)
                 {
@@ -51,8 +50,8 @@ public final class Scheduler {
         return new TimerTask() {
             @Override
             public void run() {
-                PracujPlJobCrawler pracujPlJobCrawler = new PracujPlJobCrawler();
-                List<JobOffertDto> offertJobs =  pracujPlJobCrawler.setPage("https://it.pracuj.pl/praca?sc=0&itth=38").scrapJobOffers();
+                JobsCrawler jobsCrawler = new JobsCrawler();
+                List<JobOffertDto> offertJobs =  jobsCrawler.scrapJobsFromPracujPLWebsite("https://it.pracuj.pl/praca?sc=0&itth=38");
 
                 for(JobOffertDto job: offertJobs)
                 {
