@@ -11,6 +11,7 @@ import java.net.URL;
 public final class DiscordWeebHookSender{
 
     private DiscordWeebHookSender(){}
+
     public static void sendOfferToDiscordChannel(JobOffertDto jobOffertDto) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
 

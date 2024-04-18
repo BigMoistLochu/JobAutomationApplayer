@@ -13,6 +13,7 @@ public final class Scheduler {
     private static Scheduler INSTANCE;
 
     private final Timer scheduler = new Timer();
+
     private Scheduler() {
         TimerTask firstScrappForPracujPl = getFirstScrappForPracujPl();
         firstScrappForPracujPl.run();
@@ -30,6 +31,7 @@ public final class Scheduler {
     }
     private TimerTask getFirstScrappForPracujPl()
     {
+        //potem beda tutaj wszystkie inne oferty raz scrapowane, teraz to wyglada jak redundancja kodu ale w przyszlosci sie to zmieni
         return new TimerTask() {
             @Override
             public void run() {

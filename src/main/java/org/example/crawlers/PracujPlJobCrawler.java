@@ -53,6 +53,7 @@ public class PracujPlJobCrawler {
 
         }
         page.close();
+        browser.close();
         System.out.println("Scrapper skonczyl zbierac dane z : " + url);
         return list;
     }
