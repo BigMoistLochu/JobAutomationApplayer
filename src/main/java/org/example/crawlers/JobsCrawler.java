@@ -11,22 +11,25 @@ public class JobsCrawler {
     private final Playwright playwright = Playwright.create();
     private final Page page =  playwright.firefox().launch().newPage(); //new BrowserType.LaunchOptions().setHeadless(false) if you wanna see a browser
 
-
+    public JobsCrawler(){
+        System.out.println("Rozpoczynam Prace na watku:"+Thread.currentThread());
+    }
 
     public List<JobOffertDto> scrapJobsFromPracujPLWebsite(String url)
     {
         page.navigate(url);
+        System.out.println("Wchodze na strone:"+url);
         page.waitForLoadState();
-        List<JobOffertDto> allJobsFromWebsite = new ArrayList<>();
+        List<JobOffertDto> listJobsFromPracujPl = new ArrayList<>();
 
         //to 50 offer bcs this is one page
         for (int i = 1; i <= 50; i++)
         {
             try
             {
-                String increaseJobOfferNumberInLocator = ".core_c1sbal7t > div:nth-child(3) > div:nth-child("+ i +")";
-                String restOfCorrectLocator = " > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > h2:nth-child(3) > a:nth-child(1)";
-                Locator actualLocator = page.locator(increaseJobOfferNumberInLocator + restOfCorrectLocator);
+                String jobOfferLocatorPrefix = ".core_c1sbal7t > div:nth-child(3) > div:nth-child("+ i +")";
+                String jobOfferDetailsLocatorSuffix = " > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > h2:nth-child(3) > a:nth-child(1)";
+                Locator actualLocator = page.locator(jobOfferLocatorPrefix + jobOfferDetailsLocatorSuffix);
                 boolean checkLocator = actualLocator.isVisible();
 
                 if(checkLocator)
@@ -34,7 +37,7 @@ public class JobsCrawler {
                     String title = actualLocator.textContent();
                     //.split("&searchId=")[0] is for remomving unique id from the browser for analyze customer
                     String link = actualLocator.getAttribute("href").split("&searchId=")[0];
-                    allJobsFromWebsite.add(new JobOffertDto(title,link, LocalDateTime.now()));
+                    listJobsFromPracujPl.add(new JobOffertDto(title,link, LocalDateTime.now()));
                 }
             }
             catch (RuntimeException e)
@@ -47,14 +50,35 @@ public class JobsCrawler {
 
         playwright.close();
         System.out.println("Scrapper skonczyl zbierac dane z : " + url);
-        return allJobsFromWebsite;
+        return listJobsFromPracujPl;
     }
 
 
     public List<JobOffertDto> scrapJobsFromJustJoinItWebsite(String url)
     {
-        List<JobOffertDto> allJobsFromWebsite = new ArrayList<>();
-        return allJobsFromWebsite;
+        page.navigate(url);
+        page.waitForLoadState();
+        List<JobOffertDto> allJobsFromJustJoinItWebsite = new ArrayList<>();
+
+        for (int i = 0; i <= 50; i++) {
+            Locator linkLocator = page.locator(".css-ggjav7 > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child("+i+") > div:nth-child(1) > div:nth-child(1) > a:nth-child(1)");
+            Locator titleLocator = page.locator(".css-ggjav7 > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child("+i+") > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > h2:nth-child(1)");
+
+            if(linkLocator.isVisible() && titleLocator.isVisible())
+            {
+
+
+                String title = titleLocator.textContent();
+                String link = linkLocator.getAttribute("href");
+                allJobsFromJustJoinItWebsite.add(new JobOffertDto(title,"https://justjoin.it"+link,LocalDateTime.now()));
+
+            }
+
+
+        }
+        playwright.close();
+        System.out.println("Scrapper skonczyl zbierac dane z : " + url);
+        return allJobsFromJustJoinItWebsite;
     }
 
 

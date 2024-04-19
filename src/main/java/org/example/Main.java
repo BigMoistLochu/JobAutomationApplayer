@@ -1,9 +1,7 @@
 package org.example;
 
-import org.example.models.JobOffertDto;
 
 import java.io.*;
-import java.time.LocalDateTime;
 
 
 public class Main {

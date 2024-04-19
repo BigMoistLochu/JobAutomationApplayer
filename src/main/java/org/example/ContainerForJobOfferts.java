@@ -18,8 +18,9 @@ public class ContainerForJobOfferts {
         }
     }
 
-    public static void addOffertToMapAndSendToDiscordIfOffertIsNew(JobOffertDto jobOffertDto,String nameDomain) throws IOException {
+    public static void sendLatestOfferToDiscord(JobOffertDto jobOffertDto, String nameDomain) throws IOException {
             if(!mapOffers.containsKey(jobOffertDto))
+
             {
                 mapOffers.put(jobOffertDto,nameDomain);
                 DiscordWeebHookSender.sendOfferToDiscordChannel(jobOffertDto);
